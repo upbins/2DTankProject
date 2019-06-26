@@ -1,3 +1,4 @@
 .vscode
-.Library
-.ProjectSettings
+Library/
+ProjectSettings/
+Temp/
