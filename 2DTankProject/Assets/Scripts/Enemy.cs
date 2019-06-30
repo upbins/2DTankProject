@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Enemy : MonoBehaviour {
 
-	// Use this for initialization
+// Use this for initialization
 	public float hSpeed = 3;
 	public float vSpeed = 3;
 	private Vector3 bulletEularAngle;
 	private float timeAtttackVal;//cd时间
-	private bool isDefend = true;//被保护
-	private float defendTime = 3;//保护时间
+	private float changeDirTime = 0;
+	private float v = -1;
+	private float h;
 	private SpriteRenderer spriteRender;
 	public Sprite[] tankSprite; //上右下左
-
 	public GameObject bulletPrefab;
 	public GameObject explosionPrefab;
-	public GameObject defendEffectPrefab;
+	
 	void Start () 
 	{
 		spriteRender = GetComponent<SpriteRenderer>();	
@@ -25,19 +25,9 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		//是否处于无敌状态
-		if(isDefend)
-		{
-			defendEffectPrefab.SetActive(true);
-			defendTime -= Time.deltaTime;
-			if (defendTime <= 0)
-			{
-				isDefend = false;
-				defendEffectPrefab.SetActive(false);
-			}
-		}
+
 		//子弹的cd时间
-		if(timeAtttackVal >= 0.4f)
+		if(timeAtttackVal >= 3.0f)
 		{
 			Attack();
 		}
@@ -49,8 +39,36 @@ public class Player : MonoBehaviour {
 	//坦克移动方法
 	private void Move()	
 	{
+		if (changeDirTime >= 4.0f)
+		{
+			int Dir = Random.Range(0,8);
+			if (Dir > 5)//向下走
+			{
+				v = -1.0f;
+				h = 0.0f;
+			}
+			else if(Dir == 0) //往回走
+			{
+				v = 1.0f;
+				h = 0.0f;
+			}
+			else if(Dir > 0 && Dir <= 2) //往左走
+			{
+				v = 0.0f;
+				h = -1.0f;
+			}
+			else if(Dir > 2 && Dir <= 4) //往右走
+			{
+				v = 0.0f;
+				h = 1.0f;
+			}
+			changeDirTime = 0;
+		}else
+		{
+			changeDirTime += Time.fixedDeltaTime;
+		}
 		//上下移动
-		float v = Input.GetAxisRaw("Vertical");
+		//v = Input.GetAxisRaw("Vertical");
 		transform.Translate(Vector3.up * v * vSpeed * Time.fixedDeltaTime,Space.World);
 		if (v<0)
 		{
@@ -67,7 +85,7 @@ public class Player : MonoBehaviour {
 			return;
 		}
 		//横向移动
-		float h = Input.GetAxisRaw("Horizontal");
+		//h = Input.GetAxisRaw("Horizontal");
 		transform.Translate(Vector3.right * h * hSpeed * Time.fixedDeltaTime,Space.World);
 		if (h<0)
 		{
@@ -84,18 +102,14 @@ public class Player : MonoBehaviour {
 	//坦克的攻击方法
 	private void Attack()
 	{
-		if(Input.GetKeyDown(KeyCode.Space))
-		{
-			//子弹产生的角度：当前坦克的角度+子弹应该旋转的角度
-			Instantiate(bulletPrefab,transform.position,Quaternion.Euler(transform.eulerAngles + bulletEularAngle));
-			timeAtttackVal = 0;
-		}
+		//子弹产生的角度：当前坦克的角度+子弹应该旋转的角度
+		Instantiate(bulletPrefab,transform.position,Quaternion.Euler(transform.eulerAngles + bulletEularAngle));
+		timeAtttackVal = 0;
 	}
 
 	//坦克的死亡方法
 	private void Die()
 	{
-		if (isDefend){	return ;}
 		//爆炸特效->死亡销毁
 		Instantiate(explosionPrefab,transform.position,transform.rotation);
 		Destroy(gameObject);
@@ -103,5 +117,17 @@ public class Player : MonoBehaviour {
 	private void FixedUpdate()
 	{
 		Move();
+	}
+	/// <summary>
+	/// OnCollisionEnter2D is called when this collider/rigidbody has begun
+	/// touching another rigidbody/collider.
+	/// </summary>
+	/// <param name="other">The Collision data associated with this collision.</param>
+	void OnCollisionEnter2D(Collision2D other)
+	{
+		if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Barrier")
+		{
+			changeDirTime = 1;
+		}
 	}
 }
