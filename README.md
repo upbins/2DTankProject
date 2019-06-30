@@ -1,3 +1,3 @@
 # 2DTankProject
 2D坦克大战ForUnity
-![image](http://github.com/upbins/2DTankProject/raw/master/Images/ScreenShot.png)
+![image](https://github.com/upbins/2DTankProject/tree/master/2DTankProject/Images/ScreenShot.png)
