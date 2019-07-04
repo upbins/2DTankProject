@@ -17,9 +17,12 @@ public class Player : MonoBehaviour {
 	public GameObject bulletPrefab;
 	public GameObject explosionPrefab;
 	public GameObject defendEffectPrefab;
+	public AudioSource moveAudio;
+	public AudioClip[] tankAudio;
 	void Start () 
 	{
 		spriteRender = GetComponent<SpriteRenderer>();	
+		moveAudio  = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -36,15 +39,7 @@ public class Player : MonoBehaviour {
 				defendEffectPrefab.SetActive(false);
 			}
 		}
-		//子弹的cd时间
-		if(timeAtttackVal >= 0.4f)
-		{
-			Attack();
-		}
-		else
-		{
-			timeAtttackVal += Time.deltaTime;
-		}
+	
 	}
 	//坦克移动方法
 	private void Move()	
@@ -62,6 +57,13 @@ public class Player : MonoBehaviour {
 			spriteRender.sprite = tankSprite[0];
 			bulletEularAngle = new Vector3(0,0,0);
 		}
+		if(Mathf.Abs(v) >= 0.05)
+		{
+			moveAudio.clip = tankAudio[1];
+			if(!moveAudio.isPlaying){
+				moveAudio.Play();
+			}
+		}
 		if(v!=0)
 		{
 			return;
@@ -78,6 +80,19 @@ public class Player : MonoBehaviour {
 		{
 			spriteRender.sprite = tankSprite[1];
 			bulletEularAngle = new Vector3(0,0,-90);
+		}
+		if(Mathf.Abs(h) >= 0.05)
+		{
+			moveAudio.clip = tankAudio[1];
+			if(!moveAudio.isPlaying){
+				moveAudio.Play();
+			}
+		}else
+		{
+			moveAudio.clip = tankAudio[0];
+			if(!moveAudio.isPlaying){
+				moveAudio.Play();
+			}
 		}
 		
 	}
@@ -99,9 +114,20 @@ public class Player : MonoBehaviour {
 		//爆炸特效->死亡销毁
 		Instantiate(explosionPrefab,transform.position,transform.rotation);
 		Destroy(gameObject);
+		PlayerManager.Instance.isDead = true;
 	}
 	private void FixedUpdate()
 	{
+		if(PlayerManager.Instance.isDefeat){return;}
 		Move();
+		//子弹的cd时间
+		if(timeAtttackVal >= 0.4f)
+		{
+			Attack();
+		}
+		else
+		{
+			timeAtttackVal += Time.deltaTime;
+		}
 	}
 }

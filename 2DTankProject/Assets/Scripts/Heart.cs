@@ -8,6 +8,7 @@ public class Heart : MonoBehaviour {
 	private SpriteRenderer spriteRenderer;
 	public GameObject explosionPrefab;
 	public Sprite dieSprite;
+	public AudioClip dieAudio;
 	void Start () {
 		spriteRenderer = GetComponent<SpriteRenderer>();	
 	}
@@ -21,5 +22,7 @@ public class Heart : MonoBehaviour {
 	{
 		Instantiate(explosionPrefab,transform.position,transform.rotation);
 		spriteRenderer.sprite = dieSprite;
+		PlayerManager.Instance.isDefeat = true;
+		AudioSource.PlayClipAtPoint(dieAudio,transform.position);
 	}
 }

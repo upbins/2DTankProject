@@ -110,6 +110,7 @@ public class Enemy : MonoBehaviour {
 	//坦克的死亡方法
 	private void Die()
 	{
+		PlayerManager.Instance.playerScore ++;
 		//爆炸特效->死亡销毁
 		Instantiate(explosionPrefab,transform.position,transform.rotation);
 		Destroy(gameObject);

@@ -73,6 +73,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefabs: {fileID: 1475987933781320, guid: 6d607445688cb7e46938f20eff5f6150,
     type: 2}
+  enemyPrefabsList:
+  - {fileID: 1224960408802050, guid: 913937b0803b6e5478811148689e7f84, type: 2}
+  - {fileID: 1718417000275804, guid: 13037156787dcea478eedbc1f57d5d2b, type: 2}
+  - {fileID: 1744442808669506, guid: 6d1cbcb3c4e581b4d8ab96a10238bd81, type: 2}
+  IsCreatePlayer: 0
 --- !u!212 &212790859975969718
 SpriteRenderer:
   m_ObjectHideFlags: 1

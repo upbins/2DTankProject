@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Expolosion.cs" />
      <Compile Include="Assets\Scripts\Heart.cs" />
      <Compile Include="Assets\Scripts\MapCreation.cs" />
+     <Compile Include="Assets\Scripts\Option.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerManager.cs" />
  <Reference Include="UnityEditor.StandardEvents">

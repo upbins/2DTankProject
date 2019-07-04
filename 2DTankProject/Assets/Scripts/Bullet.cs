@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour {
 	// Use this for initialization
 	public float moveSpeed = 10;
 	public bool IsPlayerBullet;
+	public AudioClip HitAudio;
+	public AudioClip heratAudio;
 	void Start () {
 		
 	}
@@ -35,6 +37,7 @@ public class Bullet : MonoBehaviour {
 			case "Heart":
 				collision.SendMessage("Die");
 				Destroy(gameObject);
+				AudioSource.PlayClipAtPoint(heratAudio,transform.position);
 				break;
 			case "Enemy":
 				if(IsPlayerBullet)
@@ -46,9 +49,11 @@ public class Bullet : MonoBehaviour {
 			case "Wall":
 				Destroy(collision.gameObject);
 				Destroy(gameObject);
+				AudioSource.PlayClipAtPoint(HitAudio,transform.position);
 				break;
 			case "Barrier":
 				Destroy(gameObject);
+				AudioSource.PlayClipAtPoint(HitAudio,transform.position);
 				break;
 			default:
 				break;

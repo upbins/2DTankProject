@@ -38,6 +38,7 @@ public class MapCreation : MonoBehaviour {
 
 	void InitPlayerTank()
 	{
+		Debug.Log("===========>"+PlayerManager.Instance.PlayerNum);
 		CreateSingleItem(itemList[3],new Vector3(-2,-8,0),Quaternion.identity,true);
 	}
 	void InitEnemyTank()
